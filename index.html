@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEPLA SODA | Giải Khát Thế Hệ Mới</title>
+    
+    <!-- Google Fonts: Outfit for a modern, geometric look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS Setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        pepla: {
+                            pink: '#FF3366',    // Vibrant Berry
+                            yellow: '#FFE600',  // Cyber Yellow
+                            cyan: '#00F0FF',    // Electric Blue/Cyan
+                            green: '#39FF14',   // Neon Green
+                            dark: '#0A0A0A',    // Deep Charcoal
+                            light: '#F8F9FA'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'marquee': 'marquee 20s linear infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities and Effects */
+        body {
+            background-color: #0A0A0A;
+            color: #F8F9FA;
+            overflow-x: hidden;
+        }
+
+        /* Subtle Noise Texture for a modern gritty feel */
+        .noise-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Hide Scrollbar but keep functionality */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF3366;
+        }
+
+        /* 3D CSS Can Styles */
+        .css-can {
+            width: 220px;
+            height: 420px;
+            border-radius: 24px;
+            position: relative;
+            box-shadow: 
+                inset -25px 0 40px rgba(0,0,0,0.5),
+                inset 20px 0 40px rgba(255,255,255,0.6),
+                30px 40px 50px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        
+        .can-top {
+            position: absolute;
+            top: -10px;
+            left: 5%;
+            width: 90%;
+            height: 20px;
+            background: linear-gradient(to right, #ccc, #fff, #999, #eee, #ccc);
+            border-radius: 50%;
+            border: 1px solid #aaa;
+            z-index: 10;
+        }
+        
+        .can-bottom {
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            width: 90%;
+            height: 20px;
+            background: linear-gradient(to right, #999, #eee, #777, #ccc, #999);
+            border-radius: 50%;
+            border: 1px solid #666;
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Glassmorphism nav */
+        .glass-nav {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Scroll reveal utility classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pepla-pink selection:text-white">
+
+    <div class="noise-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 cursor-pointer">
+                    <span class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pepla-pink via-pepla-yellow to-pepla-cyan">
+                        PEPLA.
+                    </span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="text-white hover:text-pepla-cyan px-3 py-2 rounded-md text-sm font-semibold uppercase tracking-wider transition-colors">Trang chủ</a>
+                        <a href="#flavors" class="text-gray-300 hover:text-pepla-pink px-3 py-2 rounded-md text-sm font-semibold uppercase tracking-wider transition-colors">Hương vị</a>
+                        <a href="#about" class="text-gray-300 hover:text-pepla-yellow px-3 py-2 rounded-md text-sm font-semibold uppercase tracking-wider transition-colors">Câu chuyện</a>
+                    </div>
+                </div>
+                
+                <!-- CTA Button -->
+                <div class="hidden md:block">
+                    <a href="#shop" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-pepla-dark bg-pepla-yellow rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_15px_rgba(255,230,0,0.5)]">
+                        MUA NGAY
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="text-gray-300 hover:text-white focus:outline-none p-2" id="mobile-menu-btn">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div class="md:hidden hidden bg-pepla-dark/95 backdrop-blur-lg absolute w-full border-b border-gray-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-6 space-y-1 sm:px-3 text-center">
+                <a href="#home" class="block px-3 py-4 text-white text-lg font-bold uppercase border-b border-gray-800">Trang chủ</a>
+                <a href="#flavors" class="block px-3 py-4 text-white text-lg font-bold uppercase border-b border-gray-800">Hương vị</a>
+                <a href="#about" class="block px-3 py-4 text-white text-lg font-bold uppercase border-b border-gray-800">Câu chuyện</a>
+                <a href="#shop" class="block px-3 py-4 text-pepla-yellow text-lg font-bold uppercase">Mua Ngay</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-gradient-to-b from-pepla-dark via-[#1a0b1c] to-pepla-dark">
+        <!-- Abstract Background Orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-pepla-pink/20 rounded-full blur-[100px] -z-10 mix-blend-screen animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pepla-cyan/20 rounded-full blur-[100px] -z-10 mix-blend-screen animate-pulse" style="animation-delay: 2s;"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-0">
+            
+            <!-- Hero Text -->
+            <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left z-10">
+                <div class="inline-block px-4 py-1.5 rounded-full border border-pepla-pink/30 bg-pepla-pink/10 text-pepla-pink font-bold text-sm tracking-widest mb-6 backdrop-blur-sm">
+                    ⚡ CÔNG THỨC MỚI 2026
+                </div>
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[0.9] mb-6">
+                    BÙNG NỔ <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-pepla-cyan via-pepla-yellow to-pepla-pink">
+                        GIÁC QUAN
+                    </span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-400 font-light max-w-md mb-10 leading-relaxed">
+                    Trải nghiệm dòng soda trái cây hoàn toàn mới. 100% hương vị tự nhiên, ít đường, cực kì sảng khoái. Đã khát ngay từ ngụm đầu tiên.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <button class="px-8 py-4 bg-white text-black font-black text-lg rounded-full hover:bg-pepla-pink hover:text-white transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                        KHÁM PHÁ NGAY
+                    </button>
+                    <button class="px-8 py-4 bg-transparent border-2 border-gray-600 text-white font-bold text-lg rounded-full hover:border-white transition-colors duration-300 flex items-center justify-center gap-2 group">
+                        <svg class="w-5 h-5 group-hover:text-pepla-yellow transition-colors" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                        </svg>
+                        Xem Video
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Image (3D CSS Can) -->
+            <div class="w-full lg:w-1/2 flex justify-center items-center relative h-[500px] z-10">
+                <!-- Floating Elements around the can -->
+                <div class="absolute w-16 h-16 bg-gradient-to-br from-pepla-yellow to-orange-500 rounded-full animate-float-delayed blur-[2px] top-10 right-10 shadow-lg shadow-orange-500/50"></div>
+                <div class="absolute w-10 h-10 bg-gradient-to-br from-pepla-cyan to-blue-500 rounded-lg rotate-45 animate-float blur-[1px] bottom-20 left-10 shadow-lg shadow-cyan-500/50"></div>
+
+                <!-- THE CSS CAN -->
+                <div class="css-can animate-float bg-gradient-to-br from-pepla-pink to-purple-700 flex flex-col justify-center items-center relative overflow-hidden group">
+                    <div class="can-top"></div>
+                    
+                    <!-- Can Design Details -->
+                    <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')] opacity-30 mix-blend-overlay"></div>
+                    
+                    <h2 class="text-white text-6xl font-black -rotate-90 tracking-widest absolute opacity-90 drop-shadow-xl select-none" style="text-shadow: 4px 4px 0px rgba(0,0,0,0.2);">
+                        PEPLA
+                    </h2>
+                    
+                    <div class="absolute bottom-12 w-full text-center">
+                        <span class="bg-black/40 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full border border-white/20">
+                            WILD BERRY
+                        </span>
+                    </div>
+
+                    <div class="absolute top-1/4 -right-10 w-32 h-64 bg-white/20 blur-xl rounded-full transform rotate-12 group-hover:bg-white/30 transition-all duration-500"></div>
+
+                    <div class="can-bottom"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Section -->
+    <div class="bg-pepla-yellow text-pepla-dark py-4 overflow-hidden relative rotate-1 scale-110 translate-y-4 z-20 shadow-2xl shadow-pepla-yellow/20">
+        <div class="whitespace-nowrap flex font-black text-2xl uppercase tracking-widest">
+            <div class="animate-marquee flex items-center">
+                <span class="mx-4">🌟 MÀU SẮC TƯƠI MỚI</span>
+                <span class="mx-4">•</span>
+                <span class="mx-4">⚡ SẢNG KHOÁI BẤT TẬN</span>
+                <span class="mx-4">•</span>
+                <span class="mx-4">🧊 100% TỰ NHIÊN</span>
+                <span class="mx-4">•</span>
+                <span class="mx-4">🔥 PHONG CÁCH HIỆN ĐẠI</span>
+                <span class="mx-4">•</span>
+            </div>
+            <!-- Duplicate for seamless loop -->
+            <div class="animate-marquee flex items-center" aria-hidden="true">
+                <span class="mx-4">🌟 MÀU SẮC TƯƠI MỚI</span>
+                <span class="mx-4">•</span>
+                <span class="mx-4">⚡ SẢNG KHOÁI BẤT TẬN</span>
+                <span class="mx-4">•</span>
+                <span class="mx-4">🧊 100% TỰ NHIÊN</span>
+                <span class="mx-4">•</span>
+                <span class="mx-4">🔥 PHONG CÁCH HIỆN ĐẠI</span>
+                <span class="mx-4">•</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flavors Section -->
+    <section id="flavors" class="py-32 bg-pepla-dark relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-6xl font-black mb-4">CHỌN HƯƠNG VỊ <span class="text-pepla-yellow">CỦA BẠN</span></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">3 màu sắc, 3 cá tính, 1 độ sảng khoái bùng nổ không thể chối từ.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Product Card 1: Wild Berry -->
+                <div class="group relative bg-gradient-to-b from-[#2A0815] to-[#11050A] rounded-3xl p-8 hover:-translate-y-4 transition-transform duration-500 border border-pepla-pink/20 overflow-hidden reveal">
+                    <div class="absolute -top-20 -right-20 w-40 h-40 bg-pepla-pink rounded-full blur-[80px] opacity-30 group-hover:opacity-60 transition-opacity"></div>
+                    <div class="h-64 flex justify-center items-center mb-8 relative">
+                        <!-- Mini CSS Can for card -->
+                        <div class="w-32 h-56 rounded-xl relative shadow-[inset_-10px_0_20px_rgba(0,0,0,0.5),inset_10px_0_20px_rgba(255,255,255,0.4),10px_20px_30px_rgba(0,0,0,0.6)] bg-gradient-to-br from-pepla-pink to-[#8B0032] group-hover:scale-110 transition-transform duration-500 ease-out">
+                            <div class="absolute top-0 w-full h-3 bg-gray-300 rounded-t-xl border-b border-gray-400"></div>
+                            <div class="absolute bottom-0 w-full h-3 bg-gray-400 rounded-b-xl border-t border-gray-500"></div>
+                            <div class="h-full flex flex-col justify-center items-center">
+                                <span class="text-white font-black text-2xl -rotate-90 tracking-widest drop-shadow-md">PEPLA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Wild Berry</h3>
+                    <p class="text-gray-400 text-sm mb-6 h-10">Vị dâu rừng chua ngọt, bùng nổ sảng khoái cực đỉnh.</p>
+                    <button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold group-hover:bg-pepla-pink group-hover:border-pepla-pink transition-colors">
+                        Xem Chi Tiết
+                    </button>
+                </div>
+
+                <!-- Product Card 2: Cyber Lemon -->
+                <div class="group relative bg-gradient-to-b from-[#2A2600] to-[#121100] rounded-3xl p-8 hover:-translate-y-4 transition-transform duration-500 border border-pepla-yellow/20 overflow-hidden reveal" style="transition-delay: 100ms;">
+                    <div class="absolute -top-20 -right-20 w-40 h-40 bg-pepla-yellow rounded-full blur-[80px] opacity-30 group-hover:opacity-60 transition-opacity"></div>
+                    <div class="h-64 flex justify-center items-center mb-8 relative">
+                        <div class="w-32 h-56 rounded-xl relative shadow-[inset_-10px_0_20px_rgba(0,0,0,0.5),inset_10px_0_20px_rgba(255,255,255,0.6),10px_20px_30px_rgba(0,0,0,0.6)] bg-gradient-to-br from-pepla-yellow to-[#B2A100] group-hover:scale-110 transition-transform duration-500 ease-out">
+                            <div class="absolute top-0 w-full h-3 bg-gray-300 rounded-t-xl border-b border-gray-400"></div>
+                            <div class="absolute bottom-0 w-full h-3 bg-gray-400 rounded-b-xl border-t border-gray-500"></div>
+                            <div class="h-full flex flex-col justify-center items-center">
+                                <span class="text-black font-black text-2xl -rotate-90 tracking-widest drop-shadow-md">PEPLA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Cyber Lemon</h3>
+                    <p class="text-gray-400 text-sm mb-6 h-10">Chanh vàng tươi mát kết hợp soda gas mạnh mẽ.</p>
+                    <button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold group-hover:bg-pepla-yellow group-hover:text-black group-hover:border-pepla-yellow transition-colors">
+                        Xem Chi Tiết
+                    </button>
+                </div>
+
+                <!-- Product Card 3: Neon Mint -->
+                <div class="group relative bg-gradient-to-b from-[#002A2A] to-[#001111] rounded-3xl p-8 hover:-translate-y-4 transition-transform duration-500 border border-pepla-cyan/20 overflow-hidden reveal" style="transition-delay: 200ms;">
+                    <div class="absolute -top-20 -right-20 w-40 h-40 bg-pepla-cyan rounded-full blur-[80px] opacity-30 group-hover:opacity-60 transition-opacity"></div>
+                    <div class="h-64 flex justify-center items-center mb-8 relative">
+                        <div class="w-32 h-56 rounded-xl relative shadow-[inset_-10px_0_20px_rgba(0,0,0,0.5),inset_10px_0_20px_rgba(255,255,255,0.6),10px_20px_30px_rgba(0,0,0,0.6)] bg-gradient-to-br from-pepla-cyan to-[#008B8B] group-hover:scale-110 transition-transform duration-500 ease-out">
+                            <div class="absolute top-0 w-full h-3 bg-gray-300 rounded-t-xl border-b border-gray-400"></div>
+                            <div class="absolute bottom-0 w-full h-3 bg-gray-400 rounded-b-xl border-t border-gray-500"></div>
+                            <div class="h-full flex flex-col justify-center items-center">
+                                <span class="text-black font-black text-2xl -rotate-90 tracking-widest drop-shadow-md">PEPLA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Neon Mint</h3>
+                    <p class="text-gray-400 text-sm mb-6 h-10">Bạc hà thanh mát, đánh thức mọi tế bào mệt mỏi.</p>
+                    <button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold group-hover:bg-pepla-cyan group-hover:text-black group-hover:border-pepla-cyan transition-colors">
+                        Xem Chi Tiết
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature / About Section -->
+    <section id="about" class="py-24 bg-pepla-pink text-white overflow-hidden relative">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 32px 32px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                
+                <div class="w-full lg:w-1/2 reveal">
+                    <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight">UỐNG KHÁC BIỆT <br> SỐNG NỔI BẬT.</h2>
+                    <p class="text-xl font-medium mb-8 text-white/90">
+                        Pepla không chỉ là một loại đồ uống. Đó là phong cách sống của thế hệ mới. Ra đời vào năm 2026, chúng tôi mang đến trải nghiệm thị giác và vị giác chưa từng có.
+                    </p>
+                    
+                    <ul class="space-y-6">
+                        <li class="flex items-center gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-pepla-yellow text-pepla-dark flex items-center justify-center font-bold text-xl">1</div>
+                            <div>
+                                <h4 class="text-2xl font-bold">100% Trái Cây Thật</h4>
+                                <p class="text-white/80">Nguồn nguyên liệu hữu cơ, an toàn tuyệt đối.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-pepla-cyan text-pepla-dark flex items-center justify-center font-bold text-xl">2</div>
+                            <div>
+                                <h4 class="text-2xl font-bold">Lượng Calo Cực Thấp</h4>
+                                <p class="text-white/80">Sảng khoái tối đa, không lo vóc dáng.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-pepla-dark text-white flex items-center justify-center font-bold text-xl">3</div>
+                            <div>
+                                <h4 class="text-2xl font-bold">Bao Bì Tái Chế 100%</h4>
+                                <p class="text-white/80">Bảo vệ môi trường với chất liệu thân thiện.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="w-full lg:w-1/2 relative reveal" style="transition-delay: 200ms;">
+                    <!-- Visual Composition -->
+                    <div class="aspect-square rounded-full bg-gradient-to-tr from-pepla-yellow to-pepla-pink p-2 shadow-2xl relative animate-spin-slow" style="animation-duration: 20s;">
+                        <div class="w-full h-full rounded-full bg-pepla-dark flex items-center justify-center relative overflow-hidden">
+                             <div class="absolute inset-0 opacity-40 bg-[url('https://placehold.co/600x600/111/fff?text=PEPLA+VIBE')] bg-cover bg-center"></div>
+                        </div>
+                    </div>
+                    <!-- Badge -->
+                    <div class="absolute -bottom-6 -left-6 bg-white text-pepla-dark font-black p-6 rounded-full shadow-2xl border-4 border-pepla-pink transform -rotate-12 hover:rotate-0 transition-transform">
+                        <span class="block text-3xl">2026</span>
+                        <span class="text-sm tracking-widest uppercase">Trendsetter</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-pepla-dark pt-20 pb-10 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                
+                <div class="col-span-1 md:col-span-2">
+                    <span class="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pepla-pink via-pepla-yellow to-pepla-cyan mb-6 inline-block">
+                        PEPLA.
+                    </span>
+                    <p class="text-gray-400 max-w-sm mb-6">
+                        Thương hiệu soda phong cách hiện đại dành cho giới trẻ năng động. Đánh thức thị giác, bùng nổ vị giác.
+                    </p>
+                    <div class="flex space-x-4">
+                        <!-- Social Icons (Placeholders) -->
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-pepla-pink transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-pepla-yellow hover:text-black transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6">Khám Phá</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-pepla-pink transition-colors">Về Chúng Tôi</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pepla-pink transition-colors">Sản Phẩm</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pepla-pink transition-colors">Cửa Hàng</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pepla-pink transition-colors">Tuyển Dụng</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6">Liên Hệ</h4>
+                    <ul class="space-y-3">
+                        <li class="text-gray-400">hello@peplasoda.com</li>
+                        <li class="text-gray-400">1900 1000 2026</li>
+                        <li class="text-gray-400">Quận 1, TP. Hồ Chí Minh</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
+                <p>&copy; 2026 Pepla Soda. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Điều khoản</a>
+                    <a href="#" class="hover:text-white">Bảo mật</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Big background text -->
+        <div class="w-full overflow-hidden flex justify-center mt-10 opacity-5 pointer-events-none select-none">
+            <span class="text-[15vw] font-black leading-none whitespace-nowrap">PEPLA SODA</span>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Navbar blur effect on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg', 'bg-pepla-dark/80');
+                navbar.classList.remove('bg-pepla-dark/60');
+            } else {
+                navbar.classList.remove('shadow-lg', 'bg-pepla-dark/80');
+                navbar.classList.add('bg-pepla-dark/60');
+            }
+        });
+
+        // Intersection Observer for Reveal Animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Stop observing once animated
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>
